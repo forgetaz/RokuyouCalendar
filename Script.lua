@@ -37,14 +37,14 @@ function Update()
     if Util.CriticalError > 0 then
         Util:CloseSkin()
     end
-	--Check Flg
-	if SELF:GetOption('Stop') == '1' then
-		return
-	end
 	--Check Update
 	if Util:SetCurrentDate(SELF:GetOption('curYear'), SELF:GetOption('curMonth')) ~= true then
 		return
 	end
 	--Create
-    Util:CreateCalendar()
+	Util:CreateCalendar()
+	if Util.NotRealTime == false then
+		Util:setOption('RokuyouLua', 'curYear', '[CurrentYear]')
+		Util:setOption('RokuyouLua', 'curMonth', '[CurrentMonthS]')
+	end
 end

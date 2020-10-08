@@ -111,6 +111,11 @@ local function RokuyouCalendar()
 			end
 
 			local NeedUpdate = false
+			--if current month and wrong day
+			if SELF.NotRealTime == false and SELF.UpdatedTime.day ~= SELF.RealTime.day then
+				NeedUpdate = true
+			end
+
 			if SELF.CalendarYear ~= SELF.CalendarTime.year then
 				SELF.Holidays = {}
 				SELF.CalendarYear = SELF.CalendarTime.year
@@ -123,14 +128,7 @@ local function RokuyouCalendar()
 				NeedUpdate = true
 			end
 
-			if NeedUpdate and SELF:getMeasureValue('RokuyouLua', 'Stop') ~= '1'then
-				--Do nothing if same date as the previous update
-				if SELF.UpdatedTime.year == SELF.CalendarTime.year and
-				SELF.UpdatedTime.month == SELF.CalendarTime.month and
-				SELF.UpdatedTime.day == SELF.CalendarTime.day then
-					return false
-				end
-
+			if NeedUpdate then
 				SELF.UpdatedTime = SELF.CalendarTime
 			end
 
@@ -182,7 +180,6 @@ local function RokuyouCalendar()
 
 			SELF:setOption('RokuyouLua', 'curYear', t.year)
 			SELF:setOption('RokuyouLua', 'curMonth', t.month)
-			SELF:setOption('RokuyouLua', 'Stop', '0')
 			return SELF:SetCurrentDate(t.year, t.month)
 		end,
 
@@ -208,7 +205,6 @@ local function RokuyouCalendar()
 			local Cals = SELF:getRokuyouCal(SELF.CalendarYear,SELF.CalendarMonth)
 			--Check days = 42 calendar cells
 			if table.maxn(Cals) ~= 42 then
-				SELF:setOption('RokuyouLua', 'Stop', '1')
 				SELF:ShowErrorMessage(SELF.CriticalErrorMsg, 'CalendarCell')
 				SELF.CriticalError = SELF.CriticalError + 1
 				return
@@ -305,7 +301,6 @@ local function RokuyouCalendar()
 				SELF.NotRealTime = false
 			end
 
-			SELF:setOption('RokuyouLua', 'Stop', '1')
 			return
 		end,
 
