@@ -367,20 +367,26 @@ local function RokuyouCalendar()
 				or os.date('*t', os.time({year=SELF.CalendarYear, month=5, day=5})).wday == 7 then
 				SELF.Holidays[SELF.CalendarYear][5][6] = hurikae
 			end
-			--海の日　7月第三月曜日
-			tmp = os.date('*t', os.time({year=SELF.CalendarYear, month=7, day=0})).wday
-			local uminohi = 21 - (tmp - 2)
-			if tmp == 1 then
-				uminohi = 15
+			--海の日　7月第三月曜日 2021年対応
+			local uminohi = 22
+			if SELF.CalendarYear ~= 2021 then
+				tmp = os.date('*t', os.time({year=SELF.CalendarYear, month=7, day=0})).wday
+				uminohi = 21 - (tmp - 2)
+				if tmp == 1 then
+					uminohi = 15
+				end
 			end
 			SELF.Holidays[SELF.CalendarYear][7] = {}
 			SELF.Holidays[SELF.CalendarYear][7][uminohi] = '海の日'
 			if os.date('*t', os.time({year=SELF.CalendarYear, month=7, day=uminohi})).wday == 7 then
 				SELF.Holidays[SELF.CalendarYear][7][uminohi+1] = hurikae
 			end
-			--スポーツの日　2020/7/24 or 10月第二月曜日
+			--スポーツの日　2020/7/24 or 10月第二月曜日 or 2021/7/23
 			local Sport = 24
-			if SELF.CalendarYear == 2020 then
+			if SELF.CalendarYear == 2021 then
+				Sport = 23
+				SELF.Holidays[SELF.CalendarYear][7][Sport] = 'スポーツの日'
+			elseif SELF.CalendarYear == 2020 then
 				SELF.Holidays[SELF.CalendarYear][7][Sport] = 'スポーツの日'
 			else
 				tmp = os.date('*t', os.time({year=SELF.CalendarYear, month=10, day=0})).wday
@@ -394,11 +400,16 @@ local function RokuyouCalendar()
 					SELF.Holidays[SELF.CalendarYear][10][Sport+1] = hurikae
 				end
 			end
-			--山の日 8/10
+			--山の日 8/10 2021年対応
 			SELF.Holidays[SELF.CalendarYear][8] = {}
-			SELF.Holidays[SELF.CalendarYear][8][10] = '山の日'
-			if os.date('*t', os.time({year=SELF.CalendarYear, month=8, day=10})).wday == 7 then
-				SELF.Holidays[SELF.CalendarYear][8][11] = hurikae
+			if SELF.CalendarYear == 2021 then
+				SELF.Holidays[SELF.CalendarYear][8][8] = '山の日'
+				SELF.Holidays[SELF.CalendarYear][8][9] = hurikae
+			else
+				SELF.Holidays[SELF.CalendarYear][8][10] = '山の日'
+				if os.date('*t', os.time({year=SELF.CalendarYear, month=8, day=10})).wday == 7 then
+					SELF.Holidays[SELF.CalendarYear][8][11] = hurikae
+				end
 			end
 			--敬老の日
 			tmp = os.date('*t', os.time({year=SELF.CalendarYear, month=9, day=0})).wday
